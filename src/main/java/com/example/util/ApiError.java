@@ -1,11 +1,15 @@
 package com.example.util;
 
 import com.example.util.LowerCaseClassNameResolver;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
+
 import lombok.Data;
+
 import org.hibernate.validator.internal.engine.path.PathImpl;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -26,7 +30,7 @@ class ApiError {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime timestamp;
     private String message;
-//    private String debugMessage;
+    private String debugMessage;
     private List<ApiSubError> subErrors;
 
     private ApiError() {
@@ -42,14 +46,14 @@ class ApiError {
         this();
         this.status = status;
         this.message = "Unexpected error";
-//        this.debugMessage = ex.getLocalizedMessage();
+        this.debugMessage = ex.getLocalizedMessage();
     }
 
     public ApiError(HttpStatus status, String message, Throwable ex) {
         this();
         this.status = status;
         this.message = message;
-//        this.debugMessage = ex.getLocalizedMessage();
+        this.debugMessage = ex.getLocalizedMessage();
     }
 
     private void addSubError(ApiSubError subError) {
@@ -89,11 +93,6 @@ class ApiError {
         globalErrors.forEach(this::addValidationError);
     }
 
-    /**
-     * Utility method for adding error of ConstraintViolation. Usually when a @Validated validation fails.
-     *
-     * @param cv the ConstraintViolation
-     */
     private void addValidationError(ConstraintViolation<?> cv) {
         this.addValidationError(
                 cv.getRootBeanClass().getSimpleName(),

@@ -35,7 +35,7 @@ public class NpwpServiceImpl implements NpwpService {
     public Npwp create(Npwp npwp) {
         return npwpRepository.save(npwp);
     }
-    
+
     @Override
     public void delete(UUID id) {
         npwpRepository.deleteById(id);
